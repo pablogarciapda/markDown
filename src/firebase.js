@@ -5,7 +5,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: process.env.VUE_APP_FB_API_KEY,
+  apiKey: 'AIzaSyDSNEarBPEL8PG4ILE4BZcL2J67taOeWRw',
   authDomain: 'markdown-91d6b.firebaseapp.com',
   databaseURL: 'https://markdown-91d6b-default-rtdb.firebaseio.com',
   projectId: 'markdown-91d6b',
@@ -16,5 +16,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const db = firebase.firestore();
 
-export { firebase, auth };
+export { firebase, auth, db };
