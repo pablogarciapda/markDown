@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { auth, firebase } from '../firebase';
+import { auth, firebase, db } from '../firebase';
 
 export default createStore({
   state: {
@@ -58,6 +58,27 @@ export default createStore({
       commit('createNote', note);
       commit('setActiveNote', note.id);
     },
+    async getNotes({ state, commit }) {
+      db.colletion('users')
+        .doc(state.user.uid)
+        .collection('notes')
+        .orderBy('createdAt', 'desc')
+        .onSnapShot(doSnapShot);
+
+      function doSnapShot(querySnapShot) {
+        let notes = [];
+        querySnapShot.forEach(doc => {
+          let { body, uid, createdAt } = doc.data();
+          notes.push({
+            body,
+            uid,
+            id: doc.id,
+            createdAt
+          });
+        });
+        commit('setNotes', notes);
+      }
+    },
     async userLogin() {
       const provider = firebase.auth.GoogleAuthProvider();
 
@@ -74,8 +95,13 @@ export default createStore({
         throw new Error(error.message);
       }
     },
-    checkAuth({ commit }) {
-      auth.onAuthStateChanged(user => commit('setUser', user));
+    checkAuth({ commit, dispatch }) {
+      auth.onAuthStateChanged(user => {
+        commit('setUser', user)
+        if (user) {
+          dispatch('getNotes');
+        }
+      });
     }
   },
   modules: {}
