@@ -1,49 +1,53 @@
 <template>
-  <div v-if="activeNote" class="h-full | flex flex-col">
-    <!-- Zona de edicion notas -->
-    <div class="flex-1 | flex">
-      <section class="flex-1">
-        <ActiveNoteMD
-          v-model:body="activeNote.body"
-          @blur-note="blurNote"
-          @update:body="updateNote"
-          class="w-full h-full | bg-gray-200"
-        />
-      </section>
+  <transition name="fade" mode="out-in">
+    <div v-if="activeNote" class="h-full | flex flex-col">
+      <!-- Zona de edicion notas -->
+      <div class="flex-1 | md:flex">
+        <section class="flex-1">
+          <ActiveNoteMD
+            v-model:body="activeNote.body"
+            @blur-note="blurNote"
+            @update:body="updateNote"
+            class="min-h-1/4 w-full h-full | bg-gray-200"
+          />
+        </section>
 
-      <!-- componente -->
-      <ActiveNoteHTML
-        :body="activeNote.body"
-        class="p-3 | bg-gray-900 text-white | flex-1"
-      />
+        <!-- componente -->
+        <ActiveNoteHTML
+          :body="activeNote.body"
+          class="min-h-1/4 p-3 | bg-gray-900 text-white | flex-1"
+        />
+      </div>
+      <!-- zona de acciones sobre notas -->
+      <section
+        class="mt-3 mr-3 | flex flex-col md:flex-row justify-between items-center"
+      >
+        <div class="text-sm mb-3 sm:mb-0">
+          Creada el {{ creada }} contiene {{ contiene }} palabras
+        </div>
+        <div>
+          <a
+            @click.prevent="borraNota"
+            href=""
+            class=" py-1 px-3 mr-2 text-red-700 rounded-md"
+            >Borra nota</a
+          >
+          <a
+            @click.prevent="cierraNota"
+            href=""
+            class="bg-gray-200 py-1 px-3 rounded-md"
+            >Cerrar nota</a
+          >
+        </div>
+      </section>
     </div>
-    <!-- zona de acciones sobre notas -->
-    <section class="mt-3 | flex justify-between items-center">
-      <div class="ml-3 | text-sm">
-        Creada el {{ creada }} contiene {{ contiene }} palabras
-      </div>
-      <div>
-        <a
-          @click.prevent="borraNota"
-          href=""
-          class="bg-gray-200 py-1 px-3 mr-3 rounded-md"
-          >Borra la nota</a
-        >
-        <a
-          @click.prevent="cierraNota"
-          href=""
-          class="bg-gray-200 py-1 px-3 rounded-md"
-          >Cierra la nota</a
-        >
-      </div>
-    </section>
-  </div>
-  <div v-else class="h-full | flex justify-center items-center">
-    Por favor selecciona una nota o &nbsp;
-    <a @click.prevent="createNote" class="underline font-bold" href=""
-      >crea una nueva</a
-    >&nbsp; 😁
-  </div>
+    <div v-else class="h-full | flex justify-center items-center">
+      Por favor selecciona una nota o &nbsp;
+      <a @click.prevent="createNote" class="underline font-bold" href=""
+        >crea una nueva</a
+      >&nbsp; 😁
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -94,3 +98,13 @@ export default {
   }
 };
 </script>
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, 
+.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>

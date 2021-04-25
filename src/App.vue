@@ -1,10 +1,11 @@
 <template>
+<!-- Modal para confirmar borrado de nota -->
   <borrar-nota v-if="borrando" />
   <div
-    class="container | min-h-1/2 p-3 my-3 | bg-white rounded-xl shadow-2xl | flex"
+    class="container | min-h-1/2 p-3 my-3 | bg-white rounded-xl shadow-2xl | md:flex"
   >
-    <!-- parte izuierda -->
-    <section class="w-1/4 p-3 mr-3 | bg-gray-100">
+    <!-- parte izquierda -->
+    <section class="md:w-1/4 p-3 mr-3| bg-gray-100">
       <!-- busqueda de notas -->
 
       <search-note />
