@@ -20,8 +20,8 @@ export default {
     const store = useStore();
     return {
       borrando: () => {
-        store.commit('deleteNote');
-        store.commit('setBorrando', false);
+        store.dispatch('deleteNote');
+        // store.commit('setBorrando', false);
       },
       anular: () => store.commit('setBorrando', false)
     };

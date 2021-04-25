@@ -36,12 +36,12 @@ export default createStore({
     // createNote(state, note) {
     //   state.notes.unshift(note);
     // },
-    deleteNote(state) {
-      const index = state.notes.findIndex(note => note.id === state.activeNote);
-      state.notes.splice(index, 1);
-      state.activeNote = null;
-      state.borrando = false;
-    },
+    // deleteNote(state) {
+    //   const index = state.notes.findIndex(note => note.id === state.activeNote);
+    //   state.notes.splice(index, 1);
+    //   state.activeNote = null;
+    //   state.borrando = false;
+    // },
     setBorrando(state, borrando) {
       state.borrando = borrando;
     },
@@ -78,6 +78,19 @@ export default createStore({
           .collection('notes')
           .doc(id)
           .update({ body });
+      } catch (error) {
+        throw Error(error.message);
+      }
+    },
+    async deleteNote({ state, commit }) {
+      try {
+        db.collection('users')
+          .doc(state.user.uid)
+          .collection('notes')
+          .doc(state.activeNote)
+          .delete();
+
+        commit('setBorrando', false);
       } catch (error) {
         throw Error(error.message);
       }
@@ -121,7 +134,6 @@ export default createStore({
     },
     checkAuth({ commit, dispatch }) {
       auth.onAuthStateChanged(user => {
-        console.log(user);
         commit('setUser', user);
         if (user) {
           dispatch('getNotes');

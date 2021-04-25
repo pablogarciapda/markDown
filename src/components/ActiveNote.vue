@@ -49,6 +49,7 @@
 <script>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+import { debounce } from 'lodash';
 import ActiveNoteHTML from './ActiveNoteHTML.vue';
 import ActiveNoteMD from './ActiveNoteMD.vue';
 export default {
@@ -64,16 +65,19 @@ export default {
         ? store.getters.getNoteById(store.state.activeNote)
         : null
     );
-    const updateNote = value =>
-      store.dispatch('updateNote', {
-        id: activeNote.value.id,
-        body: value
-      });
+    const updateNote = debounce(
+      value =>
+        store.dispatch('updateNote', {
+          id: activeNote.value.id,
+          body: value
+        }),
+      1000
+    );
     const cierraNota = () => store.commit('setActiveNote');
     //const borraNota = () => store.commit('deleteNote');
     const createNote = () => store.dispatch('createNote');
     const borraNota = () => store.commit('setBorrando', true);
-    const blurNote = value => !value.length && borraNota();
+    const blurNote = value => !value.length && store.dispatch('deleteNote');
 
     return {
       activeNote,
@@ -82,7 +86,9 @@ export default {
       createNote,
       borraNota,
       blurNote,
-      creada: computed(() => new Date(activeNote.value.id).toLocaleString()),
+      creada: computed(() =>
+        new Date(activeNote.value.createdAt).toLocaleString()
+      ),
       contiene: computed(() => activeNote.value.body.split(/\W+/).length)
     };
   }
