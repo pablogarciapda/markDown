@@ -1,11 +1,18 @@
 <template>
-<!-- Modal para confirmar borrado de nota -->
+  <!-- Modal para confirmar borrado de nota -->
   <borrar-nota v-if="borrando" />
   <div
+    v-if="$store.state.user"
     class="container | min-h-1/2 p-3 my-3 | bg-white rounded-xl shadow-2xl | md:flex"
   >
     <!-- parte izquierda -->
     <section class="md:w-1/4 p-3 mr-3| bg-gray-100">
+      <a
+        @click.prevent="$store.dispatch('userLogout')"
+        class="underline text-center block font-bold mb-3"
+        href=""
+        >Logout</a
+      >
       <!-- busqueda de notas -->
 
       <search-note />
@@ -21,6 +28,14 @@
       <!-- nota activa -->
       <active-note />
     </section>
+  </div>
+  <div v-else>
+    <a
+      @click.prevent="$store.dispatch('userLogin')"
+      class="w-full h-screen | flex justify-center items-center | underline"
+      href=""
+      >Login please</a
+    >
   </div>
 </template>
 

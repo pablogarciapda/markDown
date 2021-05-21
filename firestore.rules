@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      // Cerramos todo por defecto
+      allow read, write: if false;
+         
+    }
+
+    // solo el usuario con uid que coincida con el documento
+    match /users/{user}/{notes=**} {
+      allow read, write: if request.auth.uid == user;
+    }
+  }
+}

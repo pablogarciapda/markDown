@@ -90,10 +90,14 @@ export default {
       createNote,
       borraNota,
       blurNote,
-      creada: computed(() =>
-        new Date(activeNote.value.createdAt).toLocaleString()
+      creada: computed(
+        () =>
+          activeNote.value &&
+          new Date(activeNote.value.createdAt).toLocaleString()
       ),
-      contiene: computed(() => activeNote.value.body.split(/\W+/).length)
+      contiene: computed(
+        () => activeNote.value && activeNote.value.body.split(/\W+/).length
+      )
     };
   }
 };
